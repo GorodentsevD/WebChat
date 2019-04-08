@@ -1,7 +1,7 @@
 package ru.eltex.WebChat;
 
 /**
- * Класс {@code ChatMessage} описывает модель сообщения
+ * s описывает модель сообщения
  * @author Aleksey Gromov
  * */
 

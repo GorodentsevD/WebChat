@@ -31,6 +31,10 @@ repositories {
 	mavenCentral()
 }
 
+configurations.all {
+	exclude module: 'slf4j-log4j12'
+}
+
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-websocket")
 	compile("org.webjars:webjars-locator-core")
@@ -38,6 +42,10 @@ dependencies {
 	compile("org.webjars:stomp-websocket:2.3.3")
 	compile("org.webjars:bootstrap:3.3.7")
 	compile("org.webjars:jquery:3.1.0")
+
+	compile 'log4j:log4j:1.2.17'
+	compile 'org.slf4j:slf4j-api:1.7.5'
+	compile 'org.slf4j:slf4j-log4j12:1.7.5'
 
 	testCompile("org.springframework.boot:spring-boot-starter-test")
 
