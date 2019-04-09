@@ -8,7 +8,6 @@ public class WebChatApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WebChatApplication.class, args);
 	}
-
 }
 
 /**TODO LIST:
