@@ -20,6 +20,11 @@ h2 {
     margin-left: 20px;
 }
 
+button {
+    font-size: 14px;
+    cursor: pointer;
+    min-height: 34px;
+}
 
 #username-page {
     text-align: center;
@@ -29,7 +34,6 @@ h2 {
     color: purple;
     margin-right: 20px;
     font-family: sans-serif;
-
 }
 
 .hidden {
@@ -42,7 +46,7 @@ h2 {
 }
 
 .username-page-container {
-//TODO окно ввода имени
+//TODO добавить стили для окна ввода имени
 }
 
 
@@ -124,7 +128,7 @@ h2 {
 
 .connecting {
     text-align: center;
-    font: sans-serif;
+    font-family: sans-serif;
     color: #777;
     width: 100%;
 }
