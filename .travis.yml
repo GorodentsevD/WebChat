@@ -7,9 +7,6 @@ jdk:
 
 script:
   - ./gradlew check
-  - ./gradlew install -x check
-  - ./gradlew codeCoverageReport --continue
-  - ./gradlew build --scan -s
   
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
