@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" charset="UTF-8">
     <title>Login</title>
-    login page
+    <h1 align="center">login page</h1>
+    <style>
+        h1 {
+            color: #333366;
+            font-family: sans-serif;
+        }
+        button {
+            font-size: 14px;
+            cursor: pointer;
+            min-height: 34px;
+        }
+    </style>
 </head>
 <body>
-
+<div class="form-group" align="center">
+    <div>
+        <input class="form-control" placeholder="Enter Nickname" name="nickname" id="nickname" type="text" autofocus="" required=""/>
+    </div>
+    <button type="submit" class="btn btn-lg btn-success btn-block">Enter Chat</button>
+</div>
 </body>
 </html>

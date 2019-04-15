@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ChatController {
-    @GetMapping({"/login"})
+    @GetMapping("/login")
     public String login() {
         return "login";
     }
+
+    @GetMapping("/")
+    public String start() { return "login"; }
 
     @GetMapping("/chat")
     public String chat() {
