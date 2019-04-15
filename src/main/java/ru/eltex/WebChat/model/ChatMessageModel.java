@@ -1,59 +1,38 @@
-package ru.eltex.WebChat;
+package ru.eltex.WebChat.model;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import java.util.Date;
 
 /**
- * Класс {@code ChatMessage} описывает модель сообщения
- * @author Aleksey Gromov
+ * Класс {@code ChatMessageModel} описывает модель сообщения
+ * @author Дмитрий Городенцев
  * */
 
-public class ChatMessage {
+@Entity
+public class ChatMessageModel {
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private String id;
 
     private String text;
     private String author;
     private Date createDate;
 
-// блок кода из старого класса, оставил, тк в WebSocketEventListener у сообщения просится тип
+    public ChatMessageModel() {}
 
-    public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
-    }
-
-    private MessageType type;
-
-    public MessageType getType() {
-        return type;
-    }
-
-    public void setType(MessageType type) {
-        this.type = type;
-    }
-
-//конец блока
-
-    public ChatMessage() {
-    }
-
-    public ChatMessage(String text, String author, Date createDate) {
+    public ChatMessageModel(String text, String author, Date createDate) {
         this.text = text;
         this.author = author;
         this.createDate = createDate;
     }
 
-
-
     public String getAuthor() { return author; }
 
     public void setAuthor(String author) { this.author = author; }
-
-
-/* неиспользуемые методы (для работы с БД?)
 
     public String getText() { return text; }
 
@@ -72,6 +51,4 @@ public class ChatMessage {
                 ",\"createDate\":\"" + createDate + "\"" +
                 '}';
     }
-*/
-
 }
