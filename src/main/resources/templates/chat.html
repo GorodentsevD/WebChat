@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <meta charset="UTF-8">
     <title>Chat</title>
     <h1 align="center">CHAT PAGE</h1>
+    <div class="content">Hello <span class='value'></span></div>
+    <script>
+        var author = $.cookie("chat-nickname");
+        $(".content .value").html(author);
+    </script>
 </head>
 <body>
 
