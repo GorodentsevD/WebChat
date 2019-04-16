@@ -5,19 +5,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Класс {@code ChatController} принимает сообщение от одного пользователя и отсылает остальным
+ * Класс {@code ChatController} описывает поведение приложения
  * @author Aleksey Gromov
  */
 
 @Controller
 public class ChatController {
-    @GetMapping("/login")
+    @GetMapping({"/", "/login"})
     public String login() {
         return "login";
     }
-
-    @GetMapping("/")
-    public String start() { return "login"; }
 
     @GetMapping("/chat")
     public String chat() {
