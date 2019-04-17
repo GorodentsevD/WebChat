@@ -32,9 +32,9 @@
 
         function refreshMessages(messages) {
             $(".media-list").html("");
-            $.each(messages.reverse(), function(i, message) {
-                $(".media-list").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
-                + message.text + '<br/><small class="text-muted">' + message.author + ' | ' + new Date(message.createDate) + '</small><hr/></div></div></div></li>');
+            $.each(messages, function(i, message) {
+                $(".media-list").append('<li class="media"><div class="media-body">'
+                + message.text + '<br/><small class="text-muted">' + message.author + ' | ' + new Date(message.createDate) + '</small><hr/></div></li>');
             });
         }
 
@@ -53,8 +53,7 @@
                 });
 
                 $('#messageText').keyup(function(e){
-                    if(e.keyCode == 13)
-                    {
+                    if(e.keyCode == 13) {
                         sendMessage();
                     }
                 });

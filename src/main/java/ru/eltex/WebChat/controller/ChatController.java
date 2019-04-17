@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import ru.eltex.WebChat.ChatMessage;
 import ru.eltex.WebChat.model.ChatMessageModel;
 import ru.eltex.WebChat.repository.ChatMessageRepository;
@@ -27,7 +28,7 @@ public class ChatController {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
-    @RequestMapping("/login")
+    @RequestMapping({"/", "/login"})
     public String login() {
         return "login";
     }
@@ -37,25 +38,28 @@ public class ChatController {
         return "chat";
     }
 
+    private List<ChatMessageModel> chatMessageListBuilder() {
+        Iterable<ChatMessageModel> chatMessageModelListIter = chatMessageRepository.findAll();
+        List<ChatMessageModel> chatMessageModelList = new ArrayList<>();
+        chatMessageModelListIter.forEach(chatMessageModelList::add);
+
+        return chatMessageModelList;
+    }
+
     @RequestMapping(value = "/messages", method = RequestMethod.POST)
     @MessageMapping("/newMessage")
     @SendTo("/topic/newMessage")
     public ChatMessage save(ChatMessageModel chatMessageModel) {
         ChatMessageModel chatMessage = new ChatMessageModel(chatMessageModel.getText(), chatMessageModel.getAuthor(), new Date());
         chatMessageRepository.save(chatMessage);
-        /*TODO вынести в отдельную функцию или найти метод который возвращает список вместо итераторов например PagingAndSortingRepository*/
-        Iterable<ChatMessageModel> chatMessageModelListIter = chatMessageRepository.findAll();
-        List<ChatMessageModel> chatMessageModelList = new ArrayList<>();
-        chatMessageModelListIter.forEach(chatMessageModelList::add);
+
+        List<ChatMessageModel> chatMessageModelList = chatMessageListBuilder();
         return new ChatMessage(chatMessageModelList.toString());
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
     public HttpEntity list() {
-        Iterable<ChatMessageModel> chatMessageModelListIter = chatMessageRepository.findAll();
-        /*TODO вынести в отдельную функцию или найти метод который возвращает список вместо итераторов*/
-        List<ChatMessageModel> chatMessageModelList = new ArrayList<>();
-        chatMessageModelListIter.forEach(chatMessageModelList::add);
+        List<ChatMessageModel> chatMessageModelList = chatMessageListBuilder();
         return new ResponseEntity(chatMessageModelList, HttpStatus.OK);
     }
 }
