@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<html>
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.0/sockjs.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <meta charset="UTF-8">
     <title>Chat</title>
-    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
     <h1 align="center">CHAT PAGE</h1>
-
     <script>
         var stompClient = null;
 
@@ -37,7 +40,7 @@
 
         $(function(){
 
-            if (typeof $.cookie("realtime-chat-nickname") === 'undefined') {
+            if (typeof $.cookie("chat-nickname") === 'undefined') {
                 window.location = "/login"
             } else {
                 connect();
@@ -61,47 +64,43 @@
                 $container = $('.media-list');
                 $container[0].scrollTop = $container[0].scrollHeight;
                 var message = $("#messageText").val();
-                var author = $.cookie("realtime-chat-nickname");
+                var author = $.cookie("chat-nickname");
 
                 stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': author}));
 
                 $("#messageText").val("")
-                $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");
+                $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");
 
             }
         })
     </script>
 
     <style type="text/css">
+        .fixed-panel {
+            min-height: 500px;
+            max-height: 500px;
+        }
+        .media-list {
+            overflow: scroll;
+            min-height: 470px;
+            max-height: 470px;
+        }
         h1 {
             color: #333366;;
             font-family: sans-serif;
             margin-left: 20px;
         }
         .container {
-            border: 2px solid #d5dbdb;
+            border: 2px solid 'blue';
             background-color: #d5dbdb;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
-
             margin-top: 30px;
             height: calc(100% - 60px);
             max-height: 600px;
             position: relative;
         }
-
-        .fixed-panel {
-            min-height: 400px;
-            max-height: 500px;
-            background-color: 'AntiqueWhite';
-        }
-
-        .media-list {
-            overflow: auto;
-            background-color: 'AntiqueWhite';
-        }
-
         .form-control {
             float: left;
             width: calc(100% - 66px);
@@ -116,10 +115,10 @@
         .panel-heading {
             font-family: sans-serif;
         }
+
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="row " style="padding-top:40px;">
         <br/><br/>

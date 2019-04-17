@@ -9,7 +9,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.eltex.WebChat.Message;
+import ru.eltex.WebChat.ChatMessage;
 import ru.eltex.WebChat.model.ChatMessageModel;
 import ru.eltex.WebChat.repository.ChatMessageRepository;
 
@@ -40,14 +40,14 @@ public class ChatController {
     @RequestMapping(value = "/messages", method = RequestMethod.POST)
     @MessageMapping("/newMessage")
     @SendTo("/topic/newMessage")
-    public Message save(ChatMessageModel chatMessageModel) {
+    public ChatMessage save(ChatMessageModel chatMessageModel) {
         ChatMessageModel chatMessage = new ChatMessageModel(chatMessageModel.getText(), chatMessageModel.getAuthor(), new Date());
         chatMessageRepository.save(chatMessage);
         /*TODO вынести в отдельную функцию или найти метод который возвращает список вместо итераторов например PagingAndSortingRepository*/
         Iterable<ChatMessageModel> chatMessageModelListIter = chatMessageRepository.findAll();
         List<ChatMessageModel> chatMessageModelList = new ArrayList<>();
         chatMessageModelListIter.forEach(chatMessageModelList::add);
-        return new Message(chatMessageModelList.toString());
+        return new ChatMessage(chatMessageModelList.toString());
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
