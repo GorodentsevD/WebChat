@@ -1,10 +1,6 @@
 package ru.eltex.WebChat.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -16,7 +12,7 @@ import java.util.Date;
 public class ChatMessageModel {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private String id;
+    private Integer id;
 
     private String text;
     private String author;
