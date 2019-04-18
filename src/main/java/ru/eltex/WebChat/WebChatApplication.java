@@ -10,8 +10,13 @@ public class WebChatApplication {
 	}
 }
 
-//TODO:  1) подправить css
-//TODO:	 2) WebSecuriry
-//TODO:  3) Show History
-//TODO:  4*) редактирование сообщения
-//TODO:  5) отправка сообщения при дисконнекте
+/**
+ * TODO LIST:
+ *  1) нормальный css
+ *  2) фикс того, что новый юзер видит всю историю сообщений
+ *  3) обработчик событий конекта и дизконекта
+ * */
+
+//TODO:	 4) WebSecutiry
+//TODO:  5) Show History
+//TODO:  6*) редактирование сообщения

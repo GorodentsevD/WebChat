@@ -5,11 +5,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.eltex.WebChat.ChatMessage;
+import ru.eltex.WebChat.Message;
 import ru.eltex.WebChat.model.ChatMessageModel;
 import ru.eltex.WebChat.repository.ChatMessageRepository;
 import java.util.Date;
@@ -38,11 +39,10 @@ public class ChatController {
     @PostMapping("/messages")
     @MessageMapping("/newMessage")
     @SendTo("/topic/newMessage")
-    public ChatMessage save(ChatMessageModel chatMessageModel) {
+    public Message save(@Payload ChatMessageModel chatMessageModel) {
         ChatMessageModel chatMessage = new ChatMessageModel(chatMessageModel.getText(), chatMessageModel.getAuthor(), new Date());
         chatMessageRepository.save(chatMessage);
-        List<ChatMessageModel> chatMessageModelList = chatMessageRepository.findAll();
-        return new ChatMessage(chatMessageModelList.toString());
+        return new Message(chatMessage.toString());
     }
 
     @GetMapping("/messages")

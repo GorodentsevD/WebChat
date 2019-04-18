@@ -6,26 +6,6 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <h1 class="login" align="center">Login Page</h1>
-
-    <script>
-    $('.btn').css({"margin": "1%","font-size": "14px", "cursor": "pointer", "min-height": "20px"});
-    $('.login').css({"color": "#333366", "font-family": "sans-serif"});
-
-    $(function(){
-        /*if ($.cookie("chat-nickname")) {
-            window.location = "/chat"
-        } else {*/
-            $("#frm-login").submit(function(event) {
-                event.preventDefault();
-                if ($("#nickname").val() !== '') {
-                    $.cookie("chat-nickname", $("#nickname").val());
-                    window.location = "/chat";
-                }
-            })
-        //}
-    })
-    </script>
-
 </head>
 <body>
 <div class="form-group" align="center">
@@ -39,6 +19,25 @@
         <button class="btn" type="submit">Enter Chat</button>
     </form>
 </div>
+
+<script>
+    $('.btn').css({"margin": "1%","font-size": "14px", "cursor": "pointer", "min-height": "20px"});
+    $('.login').css({"color": "#333366", "font-family": "sans-serif"});
+
+    $(function(){
+        /*if ($.cookie("chat-nickname")) {
+            window.location = "/chat"
+        } else {*/
+        $("#frm-login").submit(function(event) {
+            event.preventDefault();
+            if ($("#nickname").val() !== '') {
+                $.cookie("chat-nickname", $("#nickname").val());
+                window.location = "/chat";
+            }
+        })
+        //}
+    })
+</script>
 
 </body>
 </html>

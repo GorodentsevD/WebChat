@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8"/>
     <title></title>
-    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.0/sockjs.min.js"></script>
@@ -16,83 +16,56 @@
         var enterButton = 13;
 
         function connect() {
-            var socket = new SockJS('/newMessage');
-            stompClient = Stomp.over(socket);
-
-            var name = $.cookie("chat-nickname");
-            stompClient.connect({}, function(frame) {
+            stompClient = Stomp.over(new SockJS('/newMessage'));
+            stompClient.connect({}, function() {
                 stompClient.subscribe('/topic/newMessage', function(message){
-                    refreshMessages(JSON.parse(JSON.parse(message.body).content));
+                    refreshMessages(JSON.parse(JSON.parse(message.body).message));
                 });
-                leaveJoinMessage("connect", name);
             });
-            
         }
 
         function disconnect() {
             if (stompClient != null) {
-                var author = $.cookie("chat-nickname");
-                leaveJoinMessage("disconnect", author);
                 stompClient.disconnect();
             }
         }
 
         function refreshMessages(messages) {
-            $(".media-list").html("");
             $.each(messages, function(i, message) {
                 $(".media-list").append('<li class="media"><div class="media-body">'
-                + message.text + '<br/><small class="text-muted">' + message.author + ' | ' + new Date(message.createDate) + '</small><hr/></div></li>');
-                $( "li:contains('$%#313')").css('align', 'center');
+                + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
+                    new Date(message.createDate) + '</small><hr/></div></li>');
             });
         }
 
-        function leaveJoinMessage(type, author) {
-                if (type == "connect") {
-                    var message = author + " join the chat!";
-                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': ""}));
-                    
-                    //$(".media-list").append('<li class="media"><div class="media-body">' + author + text + '</div></li>');
-                }
-                if (type == "disconnect") {
-                    var message = author + "left the chat!";
-                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': author}));
-                }
-            }
-
         $(function(){
-
             if (typeof $.cookie("chat-nickname") === 'undefined') {
                 window.location = "/login"
             } else {
                 connect();
-                $.get("/messages", function (messages) {
-                    refreshMessages(messages)
-                });
-
                 $("#sendMessage").on("click", function() {
                     sendMessage()
                 });
 
                 $('#messageText').keyup(function(e){
-                    if(e.keyCode == enterButton) {
+                    if(e.keyCode === enterButton) {
                         sendMessage();
                     }
                 });
             }
 
             function sendMessage() {
-                $container = $('.media-list');
+                var $container = $('.media-list');
                 $container[0].scrollTop = $container[0].scrollHeight;
                 var message = $("#messageText").val();
                 if (message.trim() !== "") {
-                    var author = $.cookie("chat-nickname");
-                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': author}));
-
+                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': $.cookie("chat-nickname")}));
                     $("#messageText").val("");
-                    $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");         
-                }    
+                    $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");
+                }
             }
-        }) 
+
+        });
     </script>
 
     <style type="text/css">
@@ -106,7 +79,7 @@
             max-height: 470px;
         }
         h1 {
-            color: #333366;;
+            color: #333366;
             font-family: sans-serif;
             margin-left: 20px;
         }
@@ -132,10 +105,6 @@
             min-height: 34px;
             height: 25px;
         }
-        .panel-heading {
-            font-family: sans-serif;
-        }
-
     </style>
 </head>
 <body>
@@ -145,9 +114,6 @@
 
         <div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading">
-                    <strong><span class="glyphicon glyphicon-list"></span>Chat History</strong>
-                </div>
                 <div class="panel-body fixed-panel">
                     <ul class="media-list"> </ul>
                 </div>

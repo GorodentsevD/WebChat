@@ -40,11 +40,11 @@ public class ChatMessageModel {
 
     @Override
     public String toString() {
-        return "{" +
+        return "[{" +
                 "\"id\":\"" + id + '\"' +
                 ",\"text\":\"" + text + '\"' +
                 ",\"author\":\"" + author + '\"' +
                 ",\"createDate\":\"" + createDate + "\"" +
-                '}';
+                "}]";
     }
 }
