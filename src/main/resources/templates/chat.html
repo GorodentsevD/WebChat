@@ -18,15 +18,21 @@
         function connect() {
             var socket = new SockJS('/newMessage');
             stompClient = Stomp.over(socket);
+
+            var name = $.cookie("chat-nickname");
             stompClient.connect({}, function(frame) {
                 stompClient.subscribe('/topic/newMessage', function(message){
                     refreshMessages(JSON.parse(JSON.parse(message.body).content));
                 });
+                leaveJoinMessage("connect", name);
             });
+            
         }
 
         function disconnect() {
             if (stompClient != null) {
+                var author = $.cookie("chat-nickname");
+                leaveJoinMessage("disconnect", author);
                 stompClient.disconnect();
             }
         }
@@ -36,8 +42,22 @@
             $.each(messages, function(i, message) {
                 $(".media-list").append('<li class="media"><div class="media-body">'
                 + message.text + '<br/><small class="text-muted">' + message.author + ' | ' + new Date(message.createDate) + '</small><hr/></div></li>');
+                $( "li:contains('$%#313')").css('align', 'center');
             });
         }
+
+        function leaveJoinMessage(type, author) {
+                if (type == "connect") {
+                    var message = author + " join the chat!";
+                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': ""}));
+                    
+                    //$(".media-list").append('<li class="media"><div class="media-body">' + author + text + '</div></li>');
+                }
+                if (type == "disconnect") {
+                    var message = author + "left the chat!";
+                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': author}));
+                }
+            }
 
         $(function(){
 
@@ -72,7 +92,7 @@
                     $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");         
                 }    
             }
-        })
+        }) 
     </script>
 
     <style type="text/css">
