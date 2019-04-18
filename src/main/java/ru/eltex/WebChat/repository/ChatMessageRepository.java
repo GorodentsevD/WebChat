@@ -2,7 +2,6 @@ package ru.eltex.WebChat.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import ru.eltex.WebChat.model.ChatMessageModel;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
@@ -11,4 +10,7 @@ import java.util.List;
  * @author Aleksey Gromov
  */
 
-public interface ChatMessageRepository extends CrudRepository<ChatMessageModel, Integer> {}
+public interface ChatMessageRepository extends CrudRepository<ChatMessageModel, Integer> {
+    @Override
+    List<ChatMessageModel> findAll();
+}
