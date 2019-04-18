@@ -13,6 +13,7 @@
     <h1 align="center">CHAT PAGE</h1>
     <script>
         var stompClient = null;
+        var enterButton = 13;
 
         function connect() {
             var socket = new SockJS('/newMessage');
@@ -53,7 +54,7 @@
                 });
 
                 $('#messageText').keyup(function(e){
-                    if(e.keyCode == 13) {
+                    if(e.keyCode == enterButton) {
                         sendMessage();
                     }
                 });
@@ -63,13 +64,13 @@
                 $container = $('.media-list');
                 $container[0].scrollTop = $container[0].scrollHeight;
                 var message = $("#messageText").val();
-                var author = $.cookie("chat-nickname");
+                if (message.trim() !== "") {
+                    var author = $.cookie("chat-nickname");
+                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': author}));
 
-                stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': author}));
-
-                $("#messageText").val("")
-                $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");
-
+                    $("#messageText").val("");
+                    $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");         
+                }    
             }
         })
     </script>
@@ -132,7 +133,7 @@
                 </div>
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus=""/>
+                        <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus="" required/>
                         <span class="input-group-btn">
                             <button class="btn btn-info" type="button" id="sendMessage">SEND<span class="glyphicon glyphicon-send"></span></button>
                         </span>

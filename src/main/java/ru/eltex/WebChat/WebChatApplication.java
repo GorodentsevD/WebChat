@@ -14,4 +14,4 @@ public class WebChatApplication {
 //TODO:	 2) WebSecutiry
 //TODO:  3) Show History
 //TODO:  4*) редактирование сообщения
-//TODO:  5) Исправить баг с отправкой пустых сообщений
+//TODO:  5) Исправить баг с отправкой пустых сообщений | DONE
