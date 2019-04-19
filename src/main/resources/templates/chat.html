@@ -1,17 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8"/>
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" charset="UTF-8">
+    <title>Chat</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.0/sockjs.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <meta charset="UTF-8">
     <title>Chat</title>
-    <h1 align="center">CHAT PAGE</h1>
-    <script>
+
+    <style type="text/css">
+        .container {
+            word-break: break-all;
+        }
+        .fixed-panel {
+            min-height: 500px;
+            max-height: 500px;
+        }
+        .media-list {
+            width: 1100px;
+            overflow: auto;
+            min-height: 470px;
+            max-height: 470px;
+        }
+        h1 {
+            color: #333366;
+            font-family: sans-serif;
+            margin-left: 20px;
+        }
+        .card {
+          margin-top: 50px;
+          width: 1140px;
+          height: 645px;
+          border-radius: 10px;
+          background-color: #fff;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+          background-color: #f8f8f8;
+          overflow: hidden;
+        }
+        .card-header {
+            align: center;
+            background-color:  #6c757d;
+            color: white !important;
+            box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            overflow: hidden;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row " style="padding-top:40px;">
+        <div class="card">
+                <div class="card-header" align="center">GromGorod CHAT</div>
+                <br/><br/>
+                <div class="card-info">
+                    <div class="card-block">
+                        <ul class="media-list"></ul>
+                    </div>
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus="" required/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-secondary" type="button" id="sendMessage">SEND<span class="glyphicon glyphicon-send"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+
+<script>
         var stompClient = null;
         var enterButton = 13;
 
@@ -43,7 +118,7 @@
                 window.location = "/login"
             } else {
                 connect();
-                $("#sendMessage").on("click", function() {
+                $("#sendMessage").click(function() {
                     sendMessage()
                 });
 
@@ -67,71 +142,5 @@
 
         });
     </script>
-
-    <style type="text/css">
-        .fixed-panel {
-            min-height: 500px;
-            max-height: 500px;
-        }
-        .media-list {
-            overflow: auto;
-            min-height: 470px;
-            max-height: 470px;
-        }
-        h1 {
-            color: #333366;
-            font-family: sans-serif;
-            margin-left: 20px;
-        }
-        .container {
-            border: 2px solid;
-            background-color: #d5dbdb;
-            word-break: break-all;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 30px;
-            height: calc(100% - 60px);
-            max-height: 600px;
-            position: relative;
-        }
-        .form-control {
-            float: left;
-            width: calc(100% - 66px);
-            height: 19px;
-        }
-        button {
-            font-size: 14px;
-            cursor: pointer;
-            min-height: 34px;
-            height: 25px;
-        }
-    </style>
-</head>
-<body>
-<div>
-    <a href="/messages">Show History</a>
-</div>
-<div class="container">
-    <div class="row " style="padding-top:40px;">
-        <br/><br/>
-        <div class="col-md-12">
-            <div class="panel panel-info">
-                <div class="panel-body fixed-panel">
-                    <ul class="media-list"> </ul>
-                </div>
-                <div class="panel-footer">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus="" required/>
-                        <span class="input-group-btn">
-                            <button class="btn btn-info" type="button" id="sendMessage">SEND<span class="glyphicon glyphicon-send"></span></button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
