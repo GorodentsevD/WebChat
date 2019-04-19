@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @Controller
-public class ChatController {
+public class  ChatController {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 

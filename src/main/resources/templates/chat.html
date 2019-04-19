@@ -34,7 +34,7 @@
             $.each(messages, function(i, message) {
                 $(".media-list").append('<li class="media"><div class="media-body">'
                 + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
-                    new Date(message.createDate) + '</small><hr/></div></li>');
+                    message.createDate + '</small><hr/></div></li>');
             });
         }
 
