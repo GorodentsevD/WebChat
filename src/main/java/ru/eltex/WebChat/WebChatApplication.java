@@ -14,8 +14,8 @@ public class WebChatApplication {
  * TODO LIST:
  *  1) нормальный css
  *  2) обработчик событий конекта и дизконекта
- * */
-
-//TODO:	 4) WebSecutiry
-//TODO:  5) Show History
-//TODO:  6*) редактирование сообщения
+ *  4) WebSecurity
+ *  5) Show History
+ *  6*) редактирование, удаление сообщения
+ *  7*) отправка картинок
+ */

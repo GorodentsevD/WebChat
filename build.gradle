@@ -1,18 +1,8 @@
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
-	}
-}
-
 plugins {
 	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
 	id 'application'
 }
-
 
 apply plugin: 'io.spring.dependency-management'
 
@@ -40,5 +30,7 @@ dependencies {
 	compile 'javax.xml.bind:jaxb-api'
 	compile 'org.springframework:spring-messaging'
 	compile 'org.springframework.boot:spring-boot-starter-websocket'
+	compileOnly 'org.projectlombok:lombok:1.18.6'
+	annotationProcessor 'org.projectlombok:lombok:1.18.6'
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 }

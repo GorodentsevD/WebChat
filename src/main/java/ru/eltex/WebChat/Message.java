@@ -1,14 +1,11 @@
 package ru.eltex.WebChat;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
+
+@Data
+@AllArgsConstructor
 public class Message {
-
-    private String message;
-
-    public Message(String content) {
-        this.message = content;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    @NonNull private final String message;
 }
