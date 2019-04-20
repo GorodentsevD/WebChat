@@ -7,5 +7,5 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 public class Message {
-    @NonNull private final String message;
+    @NonNull private String message;
 }
