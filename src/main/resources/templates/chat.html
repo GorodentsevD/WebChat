@@ -5,7 +5,6 @@
     <title>Chat</title>
     <script src="//code.jquery.com/jquery-1.11.1.js"></script>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.0/sockjs.min.js"></script>
@@ -42,7 +41,6 @@
           background-color: #fff;
           box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
           background-color: #f8f8f8;
-          overflow: hidden;
         }
         .card-header {
             align: center;
@@ -51,7 +49,6 @@
             box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
         }
         .form-control {
-            overflow: hidden;
             border-radius: 10px;
             margin-right: 20px;
         }
@@ -107,12 +104,16 @@
             }
         }
 
+
+
         function refreshMessages(messages) {
+            var $container = $('.media-list');
             $.each(messages, function(i, message) {
                 $(".media-list").append('<li class="media"><div class="media-body">'
                 + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
                     message.createDate + '</small><hr/></div></li>');
             });
+            $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");
         }
 
         $(function(){
@@ -133,13 +134,12 @@
 
             function sendMessage() {
                 var $container = $('.media-list');
-                $container[0].scrollTop = $container[0].scrollHeight;
                 var message = $("#messageText").val();
                 if (message.trim() !== "") {
                     stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': $.cookie("chat-nickname")}));
                     $("#messageText").val("");
-                    $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");
                 }
+                $container.animate({ scrollTop: $container[0].scrollHeight }, "slow");
             }
 
         });
