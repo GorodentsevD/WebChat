@@ -46,6 +46,11 @@
             border-radius: 10px;
             margin-right: 20px;
         }
+
+        #leave-join-message {
+            text-align: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -112,10 +117,12 @@
                         + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
                     message.createDate + '</small><hr/></div></li>');
                 } else if (message.type === 'JOIN') {
-                    $(".media-list").append('<li class="media"><div class="media-body" id="connect-message">'
+                    $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
                         + message.text + '<hr/></div></li>');
-                }
-                $("#connect-message").css({'text-align': 'center', 'font-weight': 'bold'});
+                } /*else if (message.type === 'LEAVE') {
+                    $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
+                        + message.text + '<hr/></div></li>');   
+                }*/
             });
             $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");
         }
