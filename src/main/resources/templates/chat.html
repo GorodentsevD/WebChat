@@ -53,7 +53,9 @@
 <div class="container">
     <div class="row " style="padding-top:40px;">
         <div class="card">
-            <div class="card-header" align="center">GromGorod CHAT</div>
+            <div class="card-header" align="center">
+                GromGorod CHAT
+            </div>
                 <br/><br/>
                 <div class="card-info">
                     <div class="card-block">
@@ -84,11 +86,16 @@
 
         function connect() {
             stompClient = Stomp.over(new SockJS('/newMessage'));
+            var author = $.cookie("chat-nickname");
+            var joinMessage = author + " connected to chat"
             stompClient.connect({}, function() {
-                stompClient.subscribe('/topic/newMessage', function(message){
+                stompClient.subscribe('/topic/newMessage', function(message){  
                     refreshMessages(JSON.parse(JSON.parse(message.body).message));
-                });
+                });  
+                stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': joinMessage, 
+                        'author': $.cookie("chat-nickname"), 'type': 'JOIN'})); 
             });
+            
         }
 
         function disconnect() {
@@ -97,14 +104,18 @@
             }
         }
 
-
-
         function refreshMessages(messages) {
             var $container = $('.media-list');
             $.each(messages, function(i, message) {
-                $(".media-list").append('<li class="media"><div class="media-body">'
-                + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
+                if (message.type === 'CHAT') {
+                    $(".media-list").append('<li class="media"><div class="media-body">'
+                        + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
                     message.createDate + '</small><hr/></div></li>');
+                } else if (message.type === 'JOIN') {
+                    $(".media-list").append('<li class="media"><div class="media-body" id="connect-message">'
+                        + message.text + '<hr/></div></li>');
+                }
+                $("#connect-message").css({'text-align': 'center', 'font-weight': 'bold'});
             });
             $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");
         }
@@ -129,7 +140,8 @@
                 var $container = $('.media-list');
                 var message = $("#messageText").val();
                 if (message.trim() !== "") {
-                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 'author': $.cookie("chat-nickname")}));
+                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 
+                        'author': $.cookie("chat-nickname"), 'type': 'CHAT'}));
                     $("#messageText").val("");
                 }
                 $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");

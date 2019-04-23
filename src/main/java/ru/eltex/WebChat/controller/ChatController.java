@@ -40,7 +40,8 @@ public class  ChatController {
     @MessageMapping("/newMessage")
     @SendTo("/topic/newMessage")
     public Message save(@Payload ChatMessageModel chatMessageModel) {
-        ChatMessageModel chatMessage = new ChatMessageModel(chatMessageModel.getText(), chatMessageModel.getAuthor(), new Date());
+        ChatMessageModel chatMessage = new ChatMessageModel(chatMessageModel.getText(),
+                chatMessageModel.getAuthor(), new Date(), chatMessageModel.getType());
         chatMessageRepository.save(chatMessage);
         return new Message(chatMessage.toString());
     }

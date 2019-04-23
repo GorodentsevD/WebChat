@@ -10,8 +10,8 @@ import java.util.Date;
  * */
 
 @Entity
-@Data
 @NoArgsConstructor
+@Data
 public class ChatMessageModel {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -20,12 +20,16 @@ public class ChatMessageModel {
     @NonNull private String text;
     @NonNull private String author;
     @NonNull private Date createDate;
+    @NonNull private String type;
 
-    public ChatMessageModel(String text, String author, Date createDate) {
+    public ChatMessageModel(String text, String author, Date createDate, String type) {
         this.text = text;
         this.author = author;
         this.createDate = createDate;
+        this.type = type;
     }
+
+
 
     @Override
     public String toString() {
@@ -34,6 +38,7 @@ public class ChatMessageModel {
                 ",\"text\":\"" + text + '\"' +
                 ",\"author\":\"" + author + '\"' +
                 ",\"createDate\":\"" + createDate + "\"" +
+                ",\"type\":\"" + type + "\"" +
                 "}]";
     }
 }
