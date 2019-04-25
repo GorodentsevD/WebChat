@@ -88,71 +88,96 @@
 <script>
         var stompClient = null;
         var enterButton = 13;
+        var author = $.cookie("chat-nickname");
 
-        function connect() {
-            stompClient = Stomp.over(new SockJS('/newMessage'));
-            var author = $.cookie("chat-nickname");
-            var joinMessage = author + " connected to chat"
-            stompClient.connect({}, function() {
-                stompClient.subscribe('/topic/newMessage', function(message){  
-                    refreshMessages(JSON.parse(JSON.parse(message.body).message));
-                });  
-                stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': joinMessage, 
-                        'author': $.cookie("chat-nickname"), 'type': 'JOIN'})); 
-            });
-            
+        function scrollToNewMessage() {
+            var $container = $('.media-list');
+            $container.animate({scrollTop: $container[0].scrollHeight}, "fast");
+        }
+
+        window.onbeforeunload = function (e) {
+            var message = "The message field will be cleared. Are you sure you want to leave?";
+            if (e) {
+                disconnect();
+                e.returnValue = message;
+            }
+            return message;
+        };
+
+        function sendJoinMessage() {
+            var joinMessage = author + " connected to chat";
+            stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': joinMessage,
+                'author': author, 'type': 'JOIN'}));
+        }
+
+        function sendLeaveMessage() {
+            var leaveMessage = author + " leave from chat";
+            stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': leaveMessage,
+                'author': author, 'type': 'LEAVE'}));
         }
 
         function disconnect() {
             if (stompClient != null) {
+                sendLeaveMessage();
                 stompClient.disconnect();
             }
         }
 
+        function connect() {
+            stompClient = Stomp.over(new SockJS('/newMessage'));
+            stompClient.connect({}, function() {
+                stompClient.subscribe('/topic/newMessage', function(message){
+                    refreshMessages(JSON.parse(JSON.parse(message.body).message));
+                });
+                sendJoinMessage();
+            });
+        }
+
+        function sendMessage() {
+            var message = $("#messageText").val();
+            if (message.trim() !== "") {
+                stompClient.send("/app/newMessage", {}, JSON.stringify({
+                    'text': message, 'author': author, 'type': 'CHAT'
+                }));
+                $("#messageText").val("");
+            }
+            scrollToNewMessage();
+        }
+
         function refreshMessages(messages) {
-            var $container = $('.media-list');
-            $.each(messages, function(i, message) {
+            $.each(messages, function (i, message) {
                 if (message.type === 'CHAT') {
                     $(".media-list").append('<li class="media"><div class="media-body">'
                         + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
-                    message.createDate + '</small><hr/></div></li>');
+                        message.createDate + '</small><hr/></div></li>');
                 } else if (message.type === 'JOIN') {
                     $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
                         + message.text + '<hr/></div></li>');
-                } /*else if (message.type === 'LEAVE') {
+
+                } else if (message.type === 'LEAVE') {
                     $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
-                        + message.text + '<hr/></div></li>');   
-                }*/
+                        + message.text + '<hr/></div></li>');
+                }
             });
-            $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");
+            scrollToNewMessage();
         }
 
-        $(function(){
-            if (typeof $.cookie("chat-nickname") === 'undefined') {
+        $(function() {
+            if (author === 'undefined') {
                 window.location = "/login"
-            } else {
-                connect();
-                $("#sendMessage").click(function() {
-                    sendMessage()
-                });
-
-                $('#messageText').keyup(function(e){
-                    if(e.keyCode === enterButton) {
-                        sendMessage();
-                    }
-                });
             }
+            connect();
 
-            function sendMessage() {
-                var $container = $('.media-list');
-                var message = $("#messageText").val();
-                if (message.trim() !== "") {
-                    stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': message, 
-                        'author': $.cookie("chat-nickname"), 'type': 'CHAT'}));
-                    $("#messageText").val("");
+            $("#sendMessage").click(function () {
+                sendMessage()
+            });
+
+            $('#messageText').keyup(function (e) {
+                if (e.keyCode === enterButton) {
+                    sendMessage();
                 }
-                $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");
-            }
+            });
+
         });
     </script>
 </body>
