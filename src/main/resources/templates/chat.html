@@ -59,7 +59,15 @@
     <div class="row " style="padding-top:40px;">
         <div class="card">
             <div class="card-header" align="center">
-                GromGorod CHAT
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <p class="card-text">GromGorod CHAT</p>
+                    </div>
+                    <div class="col">
+                        <a type="button" class="btn btn-secondary pull-right" id="logout">LOGOUT</a>
+                    </div>
+                </div>
             </div>
                 <br/><br/>
                 <div class="card-info">
@@ -97,12 +105,15 @@
 
         window.onbeforeunload = function (e) {
             var message = "The message field will be cleared. Are you sure you want to leave?";
-            if (e) {
+            var result = window.confirm('Do you really want to quit?');
+            if (result) {
                 disconnect();
                 e.returnValue = message;
             }
             return message;
         };
+        
+
 
         function sendJoinMessage() {
             var joinMessage = author + " connected to chat";
@@ -129,7 +140,10 @@
                 stompClient.subscribe('/topic/newMessage', function(message){
                     refreshMessages(JSON.parse(JSON.parse(message.body).message));
                 });
-                sendJoinMessage();
+                if ($.cookie("flagNoNeedConnectM") === "false") {
+                    sendJoinMessage();
+                }
+                $.cookie("flagNoNeedConnectM", "true");
             });
         }
 
