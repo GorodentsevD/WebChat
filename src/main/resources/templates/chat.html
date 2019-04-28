@@ -15,14 +15,21 @@
     <title>Chat</title>
 
     <style type="text/css">
+        #logout {
+            height: 35px;
+            width: 85px;
+            font-size: 50%; 
+        }
         .container {
             word-break: break-all;
         }
         .media-list {
-            width: 1100px;
             overflow: auto;
             min-height: 470px;
             max-height: 470px;
+        }
+        .media-body {
+            padding-right:40px;
         }
         h1 {
             color: #333366;
@@ -32,7 +39,7 @@
         .card {
           margin-top: 50px;
           width: 1140px;
-          height: 645px;
+          height: 660px;
           border-radius: 10px;
           box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
           background-color: #f8f8f8;
@@ -56,19 +63,11 @@
 <body>
 
 <div class="container">
-    <div class="row " style="padding-top:40px;">
-        <div class="card">
-            <div class="card-header" align="center">
-                <div class="row">
-                    <div class="col"></div>
-                    <div class="col">
-                        <p class="card-text">GromGorod CHAT</p>
-                    </div>
-                    <div class="col">
-                        <a type="button" class="btn btn-secondary pull-right" id="logout">LOGOUT</a>
-                    </div>
+        <div class="row " style="padding-top:40px;">
+            <div class="card">
+                <div class="card-header" align="center">
+                        <h3 class="card-text">GromGorod CHAT <button type="button" class="btn btn-outline-light float-right"  id="logout">LOGOUT</button></h3>
                 </div>
-            </div>
                 <br/><br/>
                 <div class="card-info">
                     <div class="card-block">
@@ -77,14 +76,12 @@
                     <div class="card-footer">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus="" required/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-secondary" type="button" id="sendMessage">SEND<span class="glyphicon glyphicon-send"></span></button>
-                            </span>
+                            <button class="btn btn-secondary" type="button" id="sendMessage">SEND</button>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
 </div>
 
 
@@ -102,19 +99,7 @@
             var $container = $('.media-list');
             $container.animate({scrollTop: $container[0].scrollHeight}, "fast");
         }
-
-        window.onbeforeunload = function (e) {
-            var message = "The message field will be cleared. Are you sure you want to leave?";
-            var result = window.confirm('Do you really want to quit?');
-            if (result) {
-                disconnect();
-                e.returnValue = message;
-            }
-            return message;
-        };
-        
-
-
+    
         function sendJoinMessage() {
             var joinMessage = author + " connected to chat";
             stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': joinMessage,
@@ -128,9 +113,13 @@
         }
 
         function disconnect() {
-            if (stompClient != null) {
+            var result = window.confirm("Do you want to leave?");
+            if (result && stompClient != null) {
                 sendLeaveMessage();
+                $.cookie("chat-nickname", null);
+                $.cookie("flagNoNeedConnectM", null);                
                 stompClient.disconnect();
+                window.location = "/login"
             }
         }
 
@@ -184,6 +173,10 @@
 
             $("#sendMessage").click(function () {
                 sendMessage()
+            });
+
+            $("#logout").click(function (){
+                disconnect();
             });
 
             $('#messageText').keyup(function (e) {
