@@ -43,9 +43,6 @@
             <div>
                 <input class="form-control" placeholder="Nickname" name="nickname" id="nickname" type="text" autofocus="" required=""/>
             </div>
-            <!--<div>
-                <input class="form-control" placeholder="PassWord" name="password" id="password" type="text" autofocus="" required=""/>
-            </div>-->
             <div class="row justify-content-center">
                 <button class="btn btn-secondary" type="submit">Enter Chat</button>
             </div>
@@ -59,19 +56,19 @@
 
 
 <script>
-        $(function(){
-             /*if ($.cookie("chat-nickname")) {
+        $(function() {
+            if ($.cookie("chat-nickname")) {
                 window.location = "/chat"
-            } else {*/
-            $("#frm-login").submit(function(event) {
-                event.preventDefault();
-                if ($("#nickname").val() !== '') {
-                    $.cookie("chat-nickname", $("#nickname").val());
-                    $.cookie("flagNoNeedConnectM", "false");
-                    window.location = "/chat";
-                }
-            })
-            //}
+            } else {
+                $("#frm-login").submit(function (event) {
+                    event.preventDefault();
+                    if ($("#nickname").val() !== '') {
+                        $.cookie("chat-nickname", $("#nickname").val());
+                        $.cookie("flagNoNeedConnectM", "false");
+                        window.location = "/chat";
+                    }
+                })
+            }
         })
 </script>
 </body>

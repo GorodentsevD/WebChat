@@ -95,6 +95,12 @@
         var enterButton = 13;
         var author = $.cookie("chat-nickname");
 
+        $(window).on('load', function(){
+            $.get("/messages", function (messages) {
+                refreshMessages(messages)
+            });
+        });
+
         function scrollToNewMessage() {
             var $container = $('.media-list');
             $container.animate({scrollTop: $container[0].scrollHeight}, "fast");
@@ -116,8 +122,10 @@
             var result = window.confirm("Do you want to leave?");
             if (result && stompClient != null) {
                 sendLeaveMessage();
-                $.cookie("chat-nickname", null);
-                $.cookie("flagNoNeedConnectM", null);                
+                /*$.cookie("chat-nickname", null);
+                $.cookie("flagNoNeedConnectM", null);*/
+                $.removeCookie('chat-nickname', { path: '/' });
+                $.removeCookie('flagNoNeedConnectM', { path: '/' });
                 stompClient.disconnect();
                 window.location = "/login"
             }
@@ -166,7 +174,7 @@
         }
 
         $(function() {
-            if (author === 'undefined') {
+            if ($.cookie("chat-nickname")) {
                 window.location = "/login"
             }
             connect();
