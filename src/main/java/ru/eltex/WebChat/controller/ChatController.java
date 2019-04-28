@@ -10,7 +10,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.eltex.WebChat.Message;
+import ru.eltex.WebChat.message.Message;
 import ru.eltex.WebChat.model.ChatMessageModel;
 import ru.eltex.WebChat.repository.ChatMessageRepository;
 import java.util.Date;

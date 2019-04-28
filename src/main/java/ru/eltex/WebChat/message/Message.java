@@ -1,4 +1,4 @@
-package ru.eltex.WebChat;
+package ru.eltex.WebChat.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
