@@ -17,7 +17,7 @@
         #logout {
             height: 35px;
             width: 85px;
-            font-size: 50%; 
+            font-size: 50%;
         }
         .container {
             word-break: break-all;
@@ -36,12 +36,12 @@
             margin-left: 20px;
         }
         .card {
-          margin-top: 50px;
-          width: 1140px;
-          height: 660px;
-          border-radius: 10px;
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-          background-color: #f8f8f8;
+            margin-top: 50px;
+            width: 1140px;
+            height: 660px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            background-color: #f8f8f8;
         }
         .card-header {
             background-color:  #6c757d;
@@ -52,7 +52,6 @@
             border-radius: 10px;
             margin-right: 20px;
         }
-
         #leave-join-message {
             text-align: center;
             font-weight: bold;
@@ -62,25 +61,25 @@
 <body>
 
 <div class="container">
-        <div class="row " style="padding-top:40px;">
-            <div class="card">
-                <div class="card-header" align="center">
-                        <h3 class="card-text">GromGorod CHAT <button type="button" class="btn btn-outline-light float-right"  id="logout">LOGOUT</button></h3>
+    <div class="row " style="padding-top:40px;">
+        <div class="card">
+            <div class="card-header" align="center">
+                <h3 class="card-text">GromGorod CHAT <button type="button" class="btn btn-outline-light float-right"  id="logout">LOGOUT</button></h3>
+            </div>
+            <br/><br/>
+            <div class="card-info">
+                <div class="card-block">
+                    <ul class="media-list"></ul>
                 </div>
-                <br/><br/>
-                <div class="card-info">
-                    <div class="card-block">
-                        <ul class="media-list"></ul>
-                    </div>
-                    <div class="card-footer">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus="" required/>
-                            <button class="btn btn-secondary" type="button" id="sendMessage">SEND</button>
-                        </div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus="" required/>
+                        <button class="btn btn-secondary" type="button" id="sendMessage">SEND</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 
 
@@ -90,107 +89,115 @@
 
 
 <script>
-        var stompClient = null;
-        var enterButton = 13;
-        var author = $.cookie("chat-nickname");
+    var stompClient = null;
+    var enterButton = 13;
+    var author = $.cookie("chat-nickname");
 
-        $(window).on('load', function(){
-            $.get("/messages", function (messages) {
-                refreshMessages(messages)
+    $(window).on('load', function(){
+        $.get("/messages", function (messages) {
+            refreshMessages(messages)
+        });
+    });
+
+    function scrollToNewMessage() {
+        var $container = $('.media-list');
+        $container.animate({scrollTop: $container[0].scrollHeight}, "fast");
+    }
+
+    function sendJoinMessage() {
+        var joinMessage = author + " connected to chat";
+        stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': joinMessage,
+            'author': author, 'type': 'JOIN'}));
+    }
+
+    function sendLeaveMessage() {
+        var leaveMessage = author + " leave from chat";
+        stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': leaveMessage,
+            'author': author, 'type': 'LEAVE'}));
+    }
+
+    function removeCookie() {
+        $.removeCookie('chat-nickname', { path: '/' });
+        $.removeCookie('flagNoNeedConnectM', { path: '/' });
+    }
+
+    function disconnect() {
+        var result = window.confirm("Do you want to leave?");
+        if (result && stompClient != null) {
+            sendLeaveMessage();
+            removeCookie();
+            stompClient.disconnect();
+            window.location = "/login"
+        }
+    }
+
+    function checkNeedSendJoinMessage() {
+        if ($.cookie("flagNoNeedConnectM") === "false") {
+            sendJoinMessage();
+        }
+
+        $.cookie("flagNoNeedConnectM", "true");
+    }
+
+    function connect() {
+        stompClient = Stomp.over(new SockJS('/newMessage'));
+        stompClient.connect({}, function() {
+            stompClient.subscribe('/topic/newMessage', function(message){
+                refreshMessages(JSON.parse(JSON.parse(message.body).message));
             });
+            checkNeedSendJoinMessage();
+        });
+    }
+
+    function sendMessage() {
+        var message = $("#messageText").val();
+        if (message.trim() !== "") {
+            stompClient.send("/app/newMessage", {}, JSON.stringify({
+                'text': message, 'author': author, 'type': 'CHAT'
+            }));
+            $("#messageText").val("");
+        }
+        scrollToNewMessage();
+    }
+
+    function refreshMessages(messages) {
+        $.each(messages, function (i, message) {
+            if (message.type === 'CHAT') {
+                $(".media-list").append('<li class="media"><div class="media-body">'
+                    + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
+                    message.createDate + '</small><hr/></div></li>');
+            } else if (message.type === 'JOIN') {
+                $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
+                    + message.text + '<hr/></div></li>');
+            } else if (message.type === 'LEAVE') {
+                $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
+                    + message.text + '<hr/></div></li>');
+            }
+        });
+        scrollToNewMessage();
+    }
+
+    $(function() {
+        if (!$.cookie("chat-nickname")) {
+            window.location = "/login"
+        }
+
+        connect();
+
+        $("#sendMessage").click(function () {
+            sendMessage()
         });
 
-        function scrollToNewMessage() {
-            var $container = $('.media-list');
-            $container.animate({scrollTop: $container[0].scrollHeight}, "fast");
-        }
-    
-        function sendJoinMessage() {
-            var joinMessage = author + " connected to chat";
-            stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': joinMessage,
-                'author': author, 'type': 'JOIN'}));
-        }
-
-        function sendLeaveMessage() {
-            var leaveMessage = author + " leave from chat";
-            stompClient.send("/app/newMessage", {}, JSON.stringify({ 'text': leaveMessage,
-                'author': author, 'type': 'LEAVE'}));
-        }
-
-        function disconnect() {
-            var result = window.confirm("Do you want to leave?");
-            if (result && stompClient != null) {
-                sendLeaveMessage();
-                $.removeCookie('chat-nickname', { path: '/' });
-                $.removeCookie('flagNoNeedConnectM', { path: '/' });
-                stompClient.disconnect();
-                window.location = "/login"
-            }
-        }
-
-        function connect() {
-            stompClient = Stomp.over(new SockJS('/newMessage'));
-            stompClient.connect({}, function() {
-                stompClient.subscribe('/topic/newMessage', function(message){
-                    refreshMessages(JSON.parse(JSON.parse(message.body).message));
-                });
-                if ($.cookie("flagNoNeedConnectM") === "false") {
-                    sendJoinMessage();
-                }
-                $.cookie("flagNoNeedConnectM", "true");
-            });
-        }
-
-        function sendMessage() {
-            var message = $("#messageText").val();
-            if (message.trim() !== "") {
-                stompClient.send("/app/newMessage", {}, JSON.stringify({
-                    'text': message, 'author': author, 'type': 'CHAT'
-                }));
-                $("#messageText").val("");
-            }
-            scrollToNewMessage();
-        }
-
-        function refreshMessages(messages) {
-            $.each(messages, function (i, message) {
-                if (message.type === 'CHAT') {
-                    $(".media-list").append('<li class="media"><div class="media-body">'
-                        + message.text + '<br/><small class="text-muted">' + message.author + ' | ' +
-                        message.createDate + '</small><hr/></div></li>');
-                } else if (message.type === 'JOIN') {
-                    $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
-                        + message.text + '<hr/></div></li>');
-
-                } else if (message.type === 'LEAVE') {
-                    $(".media-list").append('<li class="media"><div class="media-body" id="leave-join-message">'
-                        + message.text + '<hr/></div></li>');
-                }
-            });
-            scrollToNewMessage();
-        }
-
-        $(function() {
-            if (!$.cookie("chat-nickname")) {
-                window.location = "/login"
-            }
-            connect();
-
-            $("#sendMessage").click(function () {
-                sendMessage()
-            });
-
-            $("#logout").click(function (){
-                disconnect();
-            });
-
-            $('#messageText').keyup(function (e) {
-                if (e.keyCode === enterButton) {
-                    sendMessage();
-                }
-            });
-
+        $("#logout").click(function (){
+            disconnect();
         });
-    </script>
+
+        $('#messageText').keyup(function (e) {
+            if (e.keyCode === enterButton) {
+                sendMessage();
+            }
+        });
+    });
+</script>
 </body>
 </html>

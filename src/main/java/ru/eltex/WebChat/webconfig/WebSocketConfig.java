@@ -1,4 +1,4 @@
-package ru.eltex.WebChat.config;
+package ru.eltex.WebChat.webconfig;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

@@ -20,7 +20,6 @@
             max-height: 600px;
             position: relative;
         }
-
         div {
             margin-bottom: 10px;
         }
@@ -33,7 +32,6 @@
             margin-left: auto;
             margin-right: auto;
         }
-
     </style>
 </head>
 <body>
@@ -56,20 +54,19 @@
 
 
 <script>
-        $(function() {
-            if ($.cookie("chat-nickname")) {
-                window.location = "/chat"
-            } else {
-                $("#frm-login").submit(function (event) {
-                    event.preventDefault();
-                    if ($("#nickname").val() !== '') {
-                        $.cookie("chat-nickname", $("#nickname").val());
-                        $.cookie("flagNoNeedConnectM", "false");
-                        window.location = "/chat";
-                    }
-                })
-            }
-        })
+    $(function() {
+        if ($.cookie("chat-nickname")) {
+            window.location = "/chat"
+        } else {
+            $("#frm-login").submit(function (event) {
+                event.preventDefault();
+                if ($("#nickname").val() !== '') {
+                    $.cookie("chat-nickname", $("#nickname").val());
+                    window.location = "/chat";
+                }
+            })
+        }
+    })
 </script>
 </body>
 </html>
