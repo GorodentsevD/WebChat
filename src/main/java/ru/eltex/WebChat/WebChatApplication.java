@@ -8,10 +8,3 @@ import ru.eltex.WebChat.model.ChatMessageModel;
 public class WebChatApplication {
 	public static void main(String[] args) { SpringApplication.run(WebChatApplication.class, args); }
 }
-
-/**
- * TODO LIST:
- *  1) Покрыть тестами
- *  2) Аннотации
-
- */
