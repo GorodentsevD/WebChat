@@ -62,6 +62,7 @@
                 event.preventDefault();
                 if ($("#nickname").val() !== '') {
                     $.cookie("chat-nickname", $("#nickname").val());
+                    $.cookie("flagNoNeedConnectM", "false");
                     window.location = "/chat";
                 }
             })
