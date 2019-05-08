@@ -8,9 +8,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 /**
  * Класс {@code WebSocketConfig} включает и настройвает Stomp через WebSocket
- * @author Aleksey Gromov
  */
 @Configuration
+
+/** @EnableWebSocketMessageBroker включает обработку сообщений WebSocket,
+ * поддерживаемую брокером(диспетчером очереди) сообщений
+ * */
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override

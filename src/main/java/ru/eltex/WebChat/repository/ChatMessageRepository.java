@@ -7,7 +7,6 @@ import java.util.List;
 
 /**
  * Класс {@code ChatMessageRepository} репозиторий
- * @author Aleksey Gromov
  */
 
 public interface ChatMessageRepository extends CrudRepository<ChatMessageModel, Integer> {

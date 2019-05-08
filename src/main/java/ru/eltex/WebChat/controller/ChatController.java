@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Класс {@code ChatController} описывает поведение приложения
- * @author Aleksey Gromov
+ * Класс {@code ChatController} описывает поведение приложения,слушает запросы по пути /login (например)
+ * и возвращает какие-то данные.
  */
 
 @Controller
@@ -42,7 +42,8 @@ public class  ChatController {
         ChatMessageModel chatMessage = new ChatMessageModel(chatMessageModel.getText(),
                 chatMessageModel.getAuthor(), new Date(), chatMessageModel.getType());
         chatMessageRepository.save(chatMessage);
-        return new Message(chatMessage.toString());
+        List<ChatMessageModel> chatMessageModelList = chatMessageRepository.findAll();
+        return new Message(chatMessageModelList.toString());
     }
 
     @GetMapping("/messages")

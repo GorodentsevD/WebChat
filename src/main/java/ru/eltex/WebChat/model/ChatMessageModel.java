@@ -6,7 +6,6 @@ import java.util.Date;
 
 /**
  * Класс {@code ChatMessageModel} описывает модель сообщения
- * @author Дмитрий Городенцев
  * */
 
 @Entity
