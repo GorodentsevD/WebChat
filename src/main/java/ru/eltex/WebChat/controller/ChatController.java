@@ -16,12 +16,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Класс {@code ChatController} описывает поведение приложения
- * @author Aleksey Gromov
+ * Класс описывает поведение приложения,слушает запросы по пути /login (например)
+ * и возвращает какие то данные
  */
 
 @Controller
 public class  ChatController {
+
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
