@@ -7,15 +7,19 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * Класс {@code WebSocketConfig} включает и настройвает Stomp через WebSocket
+ * Класс WebSocketConfig включает и настройвает Stomp через WebSocket
  */
 @Configuration
-
-/** @EnableWebSocketMessageBroker включает обработку сообщений WebSocket,
- * поддерживаемую брокером(диспетчером очереди) сообщений
- * */
+/*Включает обработке сообщений по WebSocket, возвращаемый брокером сообщений*/
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    /**
+     * Переопределяет поведение по умолчанию в WebSocketMessageBrokerConfigurer для настройки брокера сообщений.
+     * Он вызывает enableSimpleBroker() для включения простого брокера сообщений в памяти чтобы возвращать обратно
+     * сообщения клиенту по направлениям с префиксом /topic. Он также объявляет префикс /app для сообщений,
+     * привязанных к методам, аннотированными @MessageMapping
+     * */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
@@ -23,7 +27,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     /**
-     * Регистрирует конечную точку "/newMessage", включив протокол SockJS
+     * Регистрирует /newMessage, включая дополнительно SockJS как альтернативный вариант обмена сообщениями,
+     * когда WebSocket не доступен.
      * */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {

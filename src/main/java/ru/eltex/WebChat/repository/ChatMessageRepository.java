@@ -6,7 +6,7 @@ import ru.eltex.WebChat.model.ChatMessageModel;
 import java.util.List;
 
 /**
- * Класс {@code ChatMessageRepository} репозиторий
+ * Класс ChatMessageRepository репозиторий для работы с сущностью(сообщением)
  */
 
 public interface ChatMessageRepository extends CrudRepository<ChatMessageModel, Integer> {

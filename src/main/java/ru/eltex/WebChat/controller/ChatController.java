@@ -16,12 +16,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Класс {@code ChatController} описывает поведение приложения,слушает запросы по пути /login (например)
- * и возвращает какие-то данные.
+ * Класс описывает поведение приложения,слушает запросы по пути /login (например)
+ * и возвращает какие то данные
  */
 
 @Controller
 public class  ChatController {
+
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
@@ -42,8 +43,7 @@ public class  ChatController {
         ChatMessageModel chatMessage = new ChatMessageModel(chatMessageModel.getText(),
                 chatMessageModel.getAuthor(), new Date(), chatMessageModel.getType());
         chatMessageRepository.save(chatMessage);
-        List<ChatMessageModel> chatMessageModelList = chatMessageRepository.findAll();
-        return new Message(chatMessageModelList.toString());
+        return new Message(chatMessage.toString());
     }
 
     @GetMapping("/messages")
